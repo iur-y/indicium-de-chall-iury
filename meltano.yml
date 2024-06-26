@@ -1,4 +1,6 @@
 version: 1
+env:
+  DBT_CLEAN_PROJECT_FILES_ONLY: 'false'
 default_environment: dev
 project_id: 1bceae40-d78c-4c96-b676-5202907a7292
 environments:
@@ -121,3 +123,15 @@ plugins:
       database: newdb
       default_target_schema: public
       load_method: overwrite
+
+
+  utilities:
+  - name: dbt-postgres
+    variant: dbt-labs
+    pip_url: dbt-core dbt-postgres git+https://github.com/meltano/dbt-ext.git@main
+    config:
+      host: localhost
+      port: 5432
+      user: northwind_user
+      dbname: newdb
+      schema: analytics

@@ -1,0 +1,8 @@
+config-version: 2
+version: 2
+sources:
+  - name: orders_and_details   # the name we want to reference this source by
+    schema: public             # the schema the raw data was loaded into
+    tables:
+      - name: orders
+      - name: order_details
