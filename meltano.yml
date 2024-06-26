@@ -5,8 +5,10 @@ environments:
 - name: dev
 - name: staging
 - name: prod
+
 plugins:
   extractors:
+
   - name: tap-postgres
     variant: meltanolabs
     pip_url: git+https://github.com/MeltanoLabs/tap-postgres.git
@@ -18,11 +20,97 @@ plugins:
     catalog: catalog/tap_postgres_catalog_file.json
     select:
     - public*.*
+
+
+  - name: tap-csv-order-details
+    inherit_from: tap-csv
+    variant: meltanolabs
+    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
+    config:
+      files:
+      - entity: order_details
+        path: data/order_details.csv
+        keys:
+        - order_id
+        - product_id
+      quotechar: '"'
+
+
+  - name: tap-csv
+    variant: meltanolabs
+    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
+    config:
+      quotechar: '"'
+      files:
+      - entity: order_details
+        path: loaded_data/csv/order_details-20240626T134855.csv
+        keys:
+        - order_id
+        - product_id
+      - entity: categories
+        path: loaded_data/postgres/public-categories-20240626T135557.csv
+        keys:
+        - category_id
+      - entity: customers
+        path: loaded_data/postgres/public-customers-20240626T135557.csv
+        keys:
+        - customer_id
+      - entity: employee_territories
+        path: loaded_data/postgres/public-employee_territories-20240626T135557.csv
+        keys:
+        - employee_id
+        - territory_id
+      - entity: employees
+        path: loaded_data/postgres/public-employees-20240626T135557.csv
+        keys:
+        - employee_id
+      - entity: orders
+        path: loaded_data/postgres/public-orders-20240626T135557.csv
+        keys:
+        - order_id
+      - entity: products
+        path: loaded_data/postgres/public-products-20240626T135557.csv
+        keys:
+        - product_id
+      - entity: region
+        path: loaded_data/postgres/public-region-20240626T135557.csv
+        keys:
+        - region_id
+      - entity: shippers
+        path: loaded_data/postgres/public-shippers-20240626T135557.csv
+        keys:
+        - shipper_id
+      - entity: suppliers
+        path: loaded_data/postgres/public-suppliers-20240626T135557.csv
+        keys:
+        - supplier_id
+      - entity: territories
+        path: loaded_data/postgres/public-territories-20240626T135557.csv
+        keys:
+        - territory_id
+      - entity: us_states
+        path: loaded_data/postgres/public-us_states-20240626T135557.csv
+        keys:
+        - state_id
+
+
   loaders:
+
   - name: target-csv
     variant: hotgluexyz
     pip_url: git+https://github.com/hotgluexyz/target-csv.git
     config:
-      destination_path: loaded_data
+      destination_path: loaded_data/postgres
       delimiter: ','
       quotechar: '"'
+
+
+  - name: target-csv-order-details
+    inherit_from: target-csv
+    config:
+      destination_path: loaded_data/csv
+      delimiter: ','
+      quotechar: '"'
+  - name: target-postgres
+    variant: meltanolabs
+    pip_url: meltanolabs-target-postgres
