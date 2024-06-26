@@ -5,3 +5,24 @@ environments:
 - name: dev
 - name: staging
 - name: prod
+plugins:
+  extractors:
+  - name: tap-postgres
+    variant: meltanolabs
+    pip_url: git+https://github.com/MeltanoLabs/tap-postgres.git
+    config:
+      database: northwind
+      host: localhost
+      user: northwind_user
+      default_replication_method: FULL_TABLE
+    catalog: catalog/tap_postgres_catalog_file.json
+    select:
+    - public*.*
+  loaders:
+  - name: target-csv
+    variant: hotgluexyz
+    pip_url: git+https://github.com/hotgluexyz/target-csv.git
+    config:
+      destination_path: loaded_data
+      delimiter: ','
+      quotechar: '"'
