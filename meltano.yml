@@ -43,56 +43,55 @@ plugins:
       quotechar: '"'
       files:
       - entity: order_details
-        path: loaded_data/csv/order_details-20240626T134855.csv
+        path: loaded_data/csv/order_details-20240626T140020.csv
         keys:
         - order_id
         - product_id
       - entity: categories
-        path: loaded_data/postgres/public-categories-20240626T135557.csv
+        path: loaded_data/postgres/public-categories-20240626T135952.csv
         keys:
         - category_id
       - entity: customers
-        path: loaded_data/postgres/public-customers-20240626T135557.csv
+        path: loaded_data/postgres/public-customers-20240626T135952.csv
         keys:
         - customer_id
       - entity: employee_territories
-        path: loaded_data/postgres/public-employee_territories-20240626T135557.csv
+        path: loaded_data/postgres/public-employee_territories-20240626T135952.csv
         keys:
         - employee_id
         - territory_id
       - entity: employees
-        path: loaded_data/postgres/public-employees-20240626T135557.csv
+        path: loaded_data/postgres/public-employees-20240626T135952.csv
         keys:
         - employee_id
       - entity: orders
-        path: loaded_data/postgres/public-orders-20240626T135557.csv
+        path: loaded_data/postgres/public-orders-20240626T135952.csv
         keys:
         - order_id
       - entity: products
-        path: loaded_data/postgres/public-products-20240626T135557.csv
+        path: loaded_data/postgres/public-products-20240626T135952.csv
         keys:
         - product_id
       - entity: region
-        path: loaded_data/postgres/public-region-20240626T135557.csv
+        path: loaded_data/postgres/public-region-20240626T135952.csv
         keys:
         - region_id
       - entity: shippers
-        path: loaded_data/postgres/public-shippers-20240626T135557.csv
+        path: loaded_data/postgres/public-shippers-20240626T135952.csv
         keys:
         - shipper_id
       - entity: suppliers
-        path: loaded_data/postgres/public-suppliers-20240626T135557.csv
+        path: loaded_data/postgres/public-suppliers-20240626T135952.csv
         keys:
         - supplier_id
       - entity: territories
-        path: loaded_data/postgres/public-territories-20240626T135557.csv
+        path: loaded_data/postgres/public-territories-20240626T135952.csv
         keys:
         - territory_id
       - entity: us_states
-        path: loaded_data/postgres/public-us_states-20240626T135557.csv
+        path: loaded_data/postgres/public-us_states-20240626T135952.csv
         keys:
         - state_id
-
 
   loaders:
 
@@ -111,6 +110,14 @@ plugins:
       destination_path: loaded_data/csv
       delimiter: ','
       quotechar: '"'
+
+
   - name: target-postgres
     variant: meltanolabs
     pip_url: meltanolabs-target-postgres
+    config:
+      user: northwind_user
+      host: localhost
+      database: newdb
+      default_target_schema: public
+      load_method: overwrite
