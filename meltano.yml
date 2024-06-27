@@ -5,6 +5,24 @@ default_environment: dev
 project_id: 1bceae40-d78c-4c96-b676-5202907a7292
 environments:
 - name: dev
+  config:
+    plugins:
+      loaders:
+      - name: target-csv
+        config:
+          destination_path: tmpdata
+          quotechar: '"'
+          delimiter: ','
+      extractors:
+      - name: tap-csv
+        config:
+          quotechar: '"'
+          files:
+          - entity: order_details
+            path: data/order_details.csv
+            keys:
+            - order_id
+            - product_id
 - name: staging
 - name: prod
 
