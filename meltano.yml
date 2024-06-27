@@ -24,20 +24,6 @@ plugins:
     - public*.*
 
 
-  - name: tap-csv-order-details
-    inherit_from: tap-csv
-    variant: meltanolabs
-    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
-    config:
-      files:
-      - entity: order_details
-        path: data/order_details.csv
-        keys:
-        - order_id
-        - product_id
-      quotechar: '"'
-
-
   - name: tap-csv
     variant: meltanolabs
     pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
@@ -106,14 +92,6 @@ plugins:
       quotechar: '"'
 
 
-  - name: target-csv-order-details
-    inherit_from: target-csv
-    config:
-      destination_path: loaded_data/csv
-      delimiter: ','
-      quotechar: '"'
-
-
   - name: target-postgres
     variant: meltanolabs
     pip_url: meltanolabs-target-postgres
@@ -126,6 +104,7 @@ plugins:
 
 
   utilities:
+
   - name: dbt-postgres
     variant: dbt-labs
     pip_url: dbt-core dbt-postgres git+https://github.com/meltano/dbt-ext.git@main
@@ -135,3 +114,15 @@ plugins:
       user: northwind_user
       dbname: newdb
       schema: analytics
+
+
+  - name: airflow
+    variant: apache
+    pip_url: git+https://github.com/meltano/airflow-ext.git@main apache-airflow==2.8.1
+      --constraint 
+      https://raw.githubusercontent.com/apache/airflow/constraints-2.8.1/constraints-no-providers-${MELTANO__PYTHON_VERSION}.txt
+    settings:
+    - name: meltano.project_dir
+      env: MELTANO_PROJECT_ROOT
+      value: $MELTANO_PROJECT_ROOT
+      label: Root Project Directory
