@@ -19,53 +19,53 @@ environments:
           quotechar: '"'
           files:
           - entity: order_details
-            path: data/csv/2024-06-26/
+            path: data/csv/2024-06-20/
             keys:
             - order_id
             - product_id
           - entity: categories
-            path: data/postgres/categories/2024-06-26/
+            path: data/postgres/categories/2024-06-20/
             keys:
             - category_id
           - entity: customers
-            path: data/postgres/customers/2024-06-26/
+            path: data/postgres/customers/2024-06-20/
             keys:
             - customer_id
           - entity: employee_territories
-            path: data/postgres/employee_territories/2024-06-26/
+            path: data/postgres/employee_territories/2024-06-20/
             keys:
             - employee_id
             - territory_id
           - entity: employees
-            path: data/postgres/employees/2024-06-26/
+            path: data/postgres/employees/2024-06-20/
             keys:
             - employee_id
           - entity: orders
-            path: data/postgres/orders/2024-06-26/
+            path: data/postgres/orders/2024-06-20/
             keys:
             - order_id
           - entity: products
-            path: data/postgres/products/2024-06-26/
+            path: data/postgres/products/2024-06-20/
             keys:
             - product_id
           - entity: region
-            path: data/postgres/region/2024-06-26/
+            path: data/postgres/region/2024-06-20/
             keys:
             - region_id
           - entity: shippers
-            path: data/postgres/shippers/2024-06-26/
+            path: data/postgres/shippers/2024-06-20/
             keys:
             - shipper_id
           - entity: suppliers
-            path: data/postgres/suppliers/2024-06-26/
+            path: data/postgres/suppliers/2024-06-20/
             keys:
             - supplier_id
           - entity: territories
-            path: data/postgres/territories/2024-06-26/
+            path: data/postgres/territories/2024-06-20/
             keys:
             - territory_id
           - entity: us_states
-            path: data/postgres/us_states/2024-06-26/
+            path: data/postgres/us_states/2024-06-20/
             keys:
             - state_id
 - name: staging
@@ -189,3 +189,10 @@ plugins:
       env: MELTANO_PROJECT_ROOT
       value: $MELTANO_PROJECT_ROOT
       label: Root Project Directory
+    # for documentation purposes, as changing these values here didn't change them in airflow.cfg
+    config:
+      core:
+        dags_are_paused_at_creation: 'False'
+        executor: LocalExecutor
+      database:
+        sql_alchemy_conn: postgresql+psycopg2://airflow_user:airflow_pass@localhost:5432/airflow_db
