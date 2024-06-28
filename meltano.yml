@@ -19,10 +19,55 @@ environments:
           quotechar: '"'
           files:
           - entity: order_details
-            path: data/order_details.csv
+            path: data/csv/2024-06-26/
             keys:
             - order_id
             - product_id
+          - entity: categories
+            path: data/postgres/categories/2024-06-26/
+            keys:
+            - category_id
+          - entity: customers
+            path: data/postgres/customers/2024-06-26/
+            keys:
+            - customer_id
+          - entity: employee_territories
+            path: data/postgres/employee_territories/2024-06-26/
+            keys:
+            - employee_id
+            - territory_id
+          - entity: employees
+            path: data/postgres/employees/2024-06-26/
+            keys:
+            - employee_id
+          - entity: orders
+            path: data/postgres/orders/2024-06-26/
+            keys:
+            - order_id
+          - entity: products
+            path: data/postgres/products/2024-06-26/
+            keys:
+            - product_id
+          - entity: region
+            path: data/postgres/region/2024-06-26/
+            keys:
+            - region_id
+          - entity: shippers
+            path: data/postgres/shippers/2024-06-26/
+            keys:
+            - shipper_id
+          - entity: suppliers
+            path: data/postgres/suppliers/2024-06-26/
+            keys:
+            - supplier_id
+          - entity: territories
+            path: data/postgres/territories/2024-06-26/
+            keys:
+            - territory_id
+          - entity: us_states
+            path: data/postgres/us_states/2024-06-26/
+            keys:
+            - state_id
 - name: staging
 - name: prod
 
