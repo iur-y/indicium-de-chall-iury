@@ -5,69 +5,6 @@ default_environment: dev
 project_id: 1bceae40-d78c-4c96-b676-5202907a7292
 environments:
 - name: dev
-  config:
-    plugins:
-      loaders:
-      - name: target-csv
-        config:
-          destination_path: tmpdata
-          quotechar: '"'
-          delimiter: ','
-      extractors:
-      - name: tap-csv
-        config:
-          quotechar: '"'
-          files:
-          - entity: order_details
-            path: data/csv/2024-06-20/
-            keys:
-            - order_id
-            - product_id
-          - entity: categories
-            path: data/postgres/categories/2024-06-20/
-            keys:
-            - category_id
-          - entity: customers
-            path: data/postgres/customers/2024-06-20/
-            keys:
-            - customer_id
-          - entity: employee_territories
-            path: data/postgres/employee_territories/2024-06-20/
-            keys:
-            - employee_id
-            - territory_id
-          - entity: employees
-            path: data/postgres/employees/2024-06-20/
-            keys:
-            - employee_id
-          - entity: orders
-            path: data/postgres/orders/2024-06-20/
-            keys:
-            - order_id
-          - entity: products
-            path: data/postgres/products/2024-06-20/
-            keys:
-            - product_id
-          - entity: region
-            path: data/postgres/region/2024-06-20/
-            keys:
-            - region_id
-          - entity: shippers
-            path: data/postgres/shippers/2024-06-20/
-            keys:
-            - shipper_id
-          - entity: suppliers
-            path: data/postgres/suppliers/2024-06-20/
-            keys:
-            - supplier_id
-          - entity: territories
-            path: data/postgres/territories/2024-06-20/
-            keys:
-            - territory_id
-          - entity: us_states
-            path: data/postgres/us_states/2024-06-20/
-            keys:
-            - state_id
 - name: staging
 - name: prod
 
@@ -76,10 +13,10 @@ plugins:
 
   - name: tap-postgres
     variant: meltanolabs
-    pip_url: git+https://github.com/MeltanoLabs/tap-postgres.git
+    pip_url: git+https://github.com/MeltanoLabs/tap-postgres.git@v0.0.9
     config:
       database: northwind
-      host: localhost
+      host: db
       user: northwind_user
       default_replication_method: FULL_TABLE
     catalog: catalog/tap_postgres_catalog_file.json
@@ -89,78 +26,22 @@ plugins:
 
   - name: tap-csv
     variant: meltanolabs
-    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
-    config:
-      quotechar: '"'
-      files:
-      - entity: order_details
-        path: loaded_data/csv/order_details-20240626T140020.csv
-        keys:
-        - order_id
-        - product_id
-      - entity: categories
-        path: loaded_data/postgres/public-categories-20240626T135952.csv
-        keys:
-        - category_id
-      - entity: customers
-        path: loaded_data/postgres/public-customers-20240626T135952.csv
-        keys:
-        - customer_id
-      - entity: employee_territories
-        path: loaded_data/postgres/public-employee_territories-20240626T135952.csv
-        keys:
-        - employee_id
-        - territory_id
-      - entity: employees
-        path: loaded_data/postgres/public-employees-20240626T135952.csv
-        keys:
-        - employee_id
-      - entity: orders
-        path: loaded_data/postgres/public-orders-20240626T135952.csv
-        keys:
-        - order_id
-      - entity: products
-        path: loaded_data/postgres/public-products-20240626T135952.csv
-        keys:
-        - product_id
-      - entity: region
-        path: loaded_data/postgres/public-region-20240626T135952.csv
-        keys:
-        - region_id
-      - entity: shippers
-        path: loaded_data/postgres/public-shippers-20240626T135952.csv
-        keys:
-        - shipper_id
-      - entity: suppliers
-        path: loaded_data/postgres/public-suppliers-20240626T135952.csv
-        keys:
-        - supplier_id
-      - entity: territories
-        path: loaded_data/postgres/public-territories-20240626T135952.csv
-        keys:
-        - territory_id
-      - entity: us_states
-        path: loaded_data/postgres/public-us_states-20240626T135952.csv
-        keys:
-        - state_id
+    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git@v1.0.1
+
 
   loaders:
 
   - name: target-csv
     variant: hotgluexyz
-    pip_url: git+https://github.com/hotgluexyz/target-csv.git
-    config:
-      destination_path: loaded_data/postgres
-      delimiter: ','
-      quotechar: '"'
+    pip_url: git+https://github.com/hotgluexyz/target-csv.git@v0.3.10
 
 
   - name: target-postgres
     variant: meltanolabs
-    pip_url: meltanolabs-target-postgres
+    pip_url: git+https://github.com/MeltanoLabs/target-postgres.git@v0.0.13
     config:
       user: northwind_user
-      host: localhost
+      host: db
       database: newdb
       default_target_schema: public
       load_method: overwrite
@@ -172,7 +53,7 @@ plugins:
     variant: dbt-labs
     pip_url: dbt-core dbt-postgres git+https://github.com/meltano/dbt-ext.git@main
     config:
-      host: localhost
+      host: db
       port: 5432
       user: northwind_user
       dbname: newdb
@@ -195,4 +76,4 @@ plugins:
         dags_are_paused_at_creation: 'False'
         executor: LocalExecutor
       database:
-        sql_alchemy_conn: postgresql+psycopg2://airflow_user:airflow_pass@localhost:5432/airflow_db
+        sql_alchemy_conn: postgresql+psycopg2://airflow_user:airflow_pass@db:5432/airflow_db

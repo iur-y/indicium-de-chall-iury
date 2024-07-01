@@ -1,3 +1,5 @@
+Scroll past challenge description for instructions on how to run the project
+
 # Indicium Tech Code Challenge
 
 Code challenge for Software Developer with focus in data projects.
@@ -82,3 +84,45 @@ The solution should be based on the diagrams below:
 
 
 Thank you for participating!
+
+# Instructions on how to run the project
+The project was developed in a Linux environment. More specifically, WSL.
+1. With the docker engine running and being in the same directory as the file compose.yml, run `docker compose up -d`, then wait for the query results to show in the _output_ directory. It will take a few minutes for the image to build.
+2. After you have an output file with the records, you can trigger the pipeline to run with a different logical date using the following command:
+```
+docker exec meltano-container /bin/sh -c '
+meltano invoke airflow dags trigger postgres_to_local -e "2024-06-30";
+meltano invoke airflow dags trigger local_to_postgres -e "2024-06-30"
+'
+```
+Note: the DAGs are configured to start from days_ago(10), so picking a date that's too far in the past won't work. Modify the above command accordingly.
+
+#### Extra:
+3. Access `localhost:8080` to connect to Airflow's web server
+   * login: `admin@localhost`
+   * password: `password`
+
+# Report
+
+## I assumed
+1. Extracting the CSV data which is already a local file and loading to local just meant using tap-csv to target-csv and changing directories.
+2. Loading everything back to postgres meant changing database and creating new tables.
+
+## Potential (?) issues that I didn't address
+
+1. bytea data type used for pictures is now a missing CSV field after being extracted.
+2. Two missing tables because of empty records when they were extracted from Postgres, so no CSV files are created.
+3. I don't know how to pin neither the dbt-postgres nor Airflow plugin versions because their pip_urls don't follow any examples shown in the docs.
+
+## Weird meltano behavior that I found
+
+1. tap-csv quotechar config set to single quote, " ' ", was throwing errors. Double quotes work fine.
+
+## Issues that I had to read about
+
+1. Catalog files because the default discovery functionality misassigns some data types.
+2. Switching from Airflow's SequentialExecutor to LocalExecutor in order to prevent the ExternalTaskSensor from blocking the whole pipeline.
+
+## Choices I made
+1. Having the same container running meltano, Airflow and dbt is probably not the best, but I wanted to see how meltano integrates those two services. Plus it looked like a less time consuming approach given the challenge's circumstances.
+2. Regarding the output query, I like the formatting that psql outputs by default. Looks more readable than CSV or JSON.

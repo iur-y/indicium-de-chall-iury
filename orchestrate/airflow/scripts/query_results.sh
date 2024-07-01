@@ -3,7 +3,7 @@
 # $2 is ${MELTANO_PROJECT_ROOT}
 
 # Variables for PostgreSQL connection
-HOST="localhost"
+HOST="db"
 PORT="5432"
 USER="northwind_user"
 # Environment variable TARGET_POSTGRES_PASSWORD

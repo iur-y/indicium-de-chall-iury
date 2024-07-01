@@ -2,4 +2,4 @@
 /.meltano
 .env
 __pycache__/
-airflow.cfg
+plugins/
